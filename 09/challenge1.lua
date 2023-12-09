@@ -45,7 +45,7 @@ for line in file:lines() do
 	end
 
 	local array = arrays[1]
-	while #array.array ~= array.zeros and #array.array > 1 do
+	while #array.array ~= array.zeros do
 		arrays[#arrays+1] = create_array(array)
 		array = arrays[#arrays]
 	end
