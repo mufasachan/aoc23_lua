@@ -1,6 +1,3 @@
-local file = io.open("./input", "r")
-if not file then os.exit() end
-
 local function printList(list)
 	local s = ""
 	for i = 1, #list do
@@ -32,27 +29,44 @@ local function predict_(arrays)
 	end
 end
 
-local score = 0
-for line in file:lines() do
-	local arrays = {}
+local function run()
+	local file = io.open("./input", "r")
+	if not file then os.exit() end
 
-	-- Init first array from line
-	arrays[1] = { array = {}, zeros = 0}
-	for numbers_str in line:gmatch("%-?%d+") do
-		local numbers = tonumber(numbers_str)
-		arrays[1].array[#arrays[1].array + 1] = numbers
-		if numbers == 0 then arrays[1].zeros = arrays[1].zeros + 1 end
+	local t1 = os.clock()
+
+	local score = 0
+	for line in file:lines() do
+		local arrays = {}
+
+		-- Init first array from line
+		arrays[1] = { array = {}, zeros = 0}
+		for numbers_str in line:gmatch("%-?%d+") do
+			local numbers = tonumber(numbers_str)
+			arrays[1].array[#arrays[1].array + 1] = numbers
+			if numbers == 0 then arrays[1].zeros = arrays[1].zeros + 1 end
+		end
+
+		local array = arrays[1]
+		while #array.array ~= array.zeros do
+			arrays[#arrays+1] = create_array(array)
+			array = arrays[#arrays]
+		end
+
+		predict_(arrays)
+		score = score + arrays[1].array[#arrays[1].array]
 	end
+	print(score)
 
-	local array = arrays[1]
-	while #array.array ~= array.zeros do
-		arrays[#arrays+1] = create_array(array)
-		array = arrays[#arrays]
-	end
+	file:close()
 
-	predict_(arrays)
-	score = score + arrays[1].array[#arrays[1].array]
+	local t2 = os.clock()
+	return t2 - t1
 end
-print(score)
 
-file:close()
+local n_iter = 500
+local duration = 0
+for _ = 1, n_iter do
+	duration = duration + run()
+end
+print("Duration: " .. duration * 1000 .. " ms")
