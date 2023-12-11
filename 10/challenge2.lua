@@ -7,23 +7,6 @@ local function position_to_id(position, n_col)
 	return (position.x - 1) * n_col + position.y
 end
 
-local function printState(n_row, n_col, position_id_to_state)
-	local string = ""
-	for i = 1, n_row do
-		for j = 1, n_col do
-			local id = position_to_id({ x = i, y = j}, n_col)
-			local state = position_id_to_state[id]
-
-			if state == 'out' then state = 'O' end
-			if state == 'loop' then state = 'L' end
-			if state == 'enclosed' then state = 'I' end
-			if not state then state = "x" end
-			string = string .. state
-		end
-		string = string .. "\n"
-	end
-	print(string)
-end
 local function is_inside(position, trajectory)
 	for i = 1, #trajectory do
 		if position.x == trajectory[i].x and position.y == trajectory[i].y then
@@ -205,6 +188,7 @@ end
 
 local start_node_orientation = node
 node, previous_node = Node.next(node, map, previous_node), node
+orientation_out = Node.update_direction(orientation_out, node)
 
 while not Node.equal(node, start_node_orientation) do
 	node, previous_node = Node.next(node, map, previous_node), node
@@ -262,8 +246,6 @@ while not Node.equal(node, start_node_orientation) do
 	end
 end
 
-printState(n_row, n_col, position_id_to_state)
-
 local id_to_unknown = {}
 local unknown_ids = {}
 for i = 1, n_row do
@@ -295,9 +277,6 @@ while not all_done(id_to_unknown, unknown_ids) do
 				local id_around = position_to_id(around_position, n_col)
 
 				local state_around = position_id_to_state[id_around]
-				if around_position.x == 4 and around_position.y == 6 then
-					print(state_around)
-				end
 				if state_around == 'enclosed' or state_around == 'out' then
 					state = state_around
 					break
@@ -340,30 +319,5 @@ for i = 1, n_row do
 	end
 end
 print("Score: " .. count_enclosed)
-
-local count_loop = 0
-local count_out = 0
-for i = 1, n_row do
-	for j = 1, n_col do
-		local id = position_to_id({x = i, y = j }, n_col)
-
-		if position_id_to_state[id] == 'out' then
-			count_out = count_out + 1
-		end
-		if position_id_to_state[id] == 'loop' then
-			count_loop = count_loop + 1
-		end
-	end
-end
-
-
-printState(n_row, n_col, position_id_to_state)
-os.exit()
-
-print("Loop node: " .. count_loop)
-print("Enclosed node: " .. count_enclosed)
-print("Out node: " .. count_out)
-print("Sum node: " .. count_enclosed + count_loop + count_out)
-print("All node: " .. n_row * n_col)
 
 file:close()
