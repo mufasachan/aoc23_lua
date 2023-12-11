@@ -1,6 +1,6 @@
 local Node = {}
 
-local char_to_pipe = {
+Node.char_to_pipe = {
 	["|"] = { up = true, down = true, left = false, right = false },
 	["-"] = { up = false, down = false, left = true, right = true },
 	["L"] = { up = true, down = false, left = false, right = true },
@@ -11,11 +11,96 @@ local char_to_pipe = {
 	["S"] = nil,
 }
 
+-- J and F have the same direction's update .
+-- 7 and J have the same direction's update .
+Node._update_direction = {
+	["J"] = {
+		right = "down",
+		down = "right",
+		left = "up",
+		up = "left",
+	},
+	["F"] = {
+		right = "down",
+		down = "right",
+		left = "up",
+		up = "left",
+	},
+	["L"] = {
+		down = "left",
+		left = "down",
+		up = "right",
+		right = "up",
+	},
+	["7"] = {
+		down = "left",
+		left = "down",
+		up = "right",
+		right = "up",
+	}
+}
+
+function Node.update_direction(direction, node)
+	if node.char == '-' or node.char == '|' then return direction end
+
+	return Node._update_direction[node.char][direction]
+end
+
+function Node.get_in_out_positions(node, direction)
+	if node.char == 'L' then
+		local position_1 = { x = node.x + 1, y = node.y}
+		local position_2 = { x = node.x, y = node.y - 1}
+		return position_1, position_2
+	elseif node.char == '7' then
+		local position_1 = { x = node.x - 1, y = node.y}
+		local position_2 = { x = node.x, y = node.y + 1}
+		return position_1, position_2
+	elseif node.char == 'J' then
+		local position_1 = { x = node.x + 1, y = node.y}
+		local position_2 = { x = node.x, y = node.y + 1}
+		return position_1, position_2
+	elseif node.char == 'F' then
+		local position_1 = { x = node.x - 1, y = node.y}
+		local position_2 = { x = node.x, y = node.y - 1}
+		return position_1, position_2
+	end
+
+	local out_position
+	local in_position
+	if node.char == '|' then
+		if direction == 'right' then
+			out_position = { x = node.x, y = node.y + 1}
+			in_position = { x = node.x, y = node.y - 1}
+		elseif direction == 'left' then
+			in_position = { x = node.x, y = node.y + 1}
+			out_position = { x = node.x, y = node.y - 1}
+		else
+			print("Wrong direction with |")
+			os.exit()
+		end
+	end
+	if node.char == '-' then
+		if direction == 'up' then
+			out_position = { x = node.x - 1, y = node.y }
+			in_position = { x = node.x + 1, y = node.y }
+		elseif direction == 'down' then
+			out_position = { x = node.x + 1, y = node.y }
+			in_position = { x = node.x - 1, y = node.y }
+		else
+			print("Wrong direction with -")
+			os.exit()
+		end
+	end
+
+	return out_position, in_position
+end
+
 function Node.new(x, y, char)
 	local is_start = (char == 'S') and true or false
-	local pipe = char_to_pipe[char]
+	local pipe = Node.char_to_pipe[char]
 
 	return {
+		char = char,
 		x = x,
 		y = y,
 		pipe = pipe,
