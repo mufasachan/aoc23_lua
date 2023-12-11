@@ -64,18 +64,14 @@ for i = 1, #columns_without_galaxy do
 end
 n_columns = #universe[1]
 
-local s = ""
 local galaxies = {}
 for i = 1, n_rows do
 	for j = 1, n_columns do
-		s = s .. universe[i][j]
 		if universe[i][j] == '#' then
 			galaxies[#galaxies+1] = { x = i, y = j }
 		end
 	end
-	s = s .. "\n"
 end
-print(s)
 
 local galaxy_pairs = {}
 for i = 1, #galaxies do
