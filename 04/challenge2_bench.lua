@@ -35,10 +35,10 @@ local function run()
 		local winning_numbers = {}
 		for i = 1, number_winning_numbers_one_line do
 			winning_numbers[#winning_numbers+1] = tonumber(
-			line:sub(
-			start_winning_number_idx + (i-1) * 3,
-			start_winning_number_idx + (i-1) * 3 + 2
-			)
+				line:sub(
+					start_winning_number_idx + (i-1) * 3,
+					start_winning_number_idx + (i-1) * 3 + 2
+				)
 			)
 		end
 
@@ -46,9 +46,9 @@ local function run()
 		-- Get player number and check if they are in winning numbers
 		for i = 1, number_player_numbers_one_line do
 			local player_number = tonumber(
-			line:sub(
-			start_player_number_idx + (i-1) * 3,
-			start_player_number_idx + (i-1) * 3 + 2
+				line:sub(
+					start_player_number_idx + (i-1) * 3,
+					start_player_number_idx + (i-1) * 3 + 2
 			)
 			)
 
