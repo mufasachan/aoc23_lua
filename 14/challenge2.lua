@@ -150,12 +150,14 @@ for line in file:lines() do
 end
 file:close()
 
+local t1 = os.clock()
+
 -- Move rocks up
 local n_cycles = 1000000000
 local start_loop
 local length_loop
 local memory = {}
-for i = 1, n_cycles do
+for _ = 1, n_cycles do
 	one_cycle(rows, columns)
 
 	start_loop, length_loop = has_loop(memory)
@@ -182,5 +184,8 @@ for col = 1, #columns do
 		end
 	end
 end
-print(score)
+
+local t2 = os.clock()
+local duration = string.format("%.3f", t2 - t1)
+print(duration .. " seconds.")
 
