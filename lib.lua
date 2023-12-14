@@ -1,7 +1,9 @@
 local lib = {}
 
----@alias list table #1D continuous 1-indexed table.
----@alias matrix table #2D continuous 1-indexed table.
+---@generic T an element of a list or matrix
+---@alias list T[] a 1D continuous 1-indexed 
+---@alias matrix list[] a 2D continuous 1-indexed 
+
 
 ---@param list list The list to be printed
 ---@param separator? string The seperator between elements
@@ -88,6 +90,48 @@ function lib.mequal(matrix1, matrix2)
 	end
 
 	return true
+end
+
+---Get a list from a line of text
+---@param line string
+---@return list #continuous 1D-indexed table.
+function lib.list_from_line(line)
+	local list = {}
+
+	for i = 1, #line do
+		list[#list+1] = line:sub(i, i)
+	end
+	return list
+end
+
+---Get the file contents with a list of string
+---@param filename string File to be loaded
+---@return string[] # lines of the file
+function lib.lines_from_file(filename)
+	local file = assert(io.open(filename), "r")
+
+	local lines = {}
+	for line in file:lines() do
+		lines[#lines+1] = line
+	end
+
+	file:close()
+	return lines
+end
+
+---Create a matrix from a text file.
+---@param filename string
+---@return matrix # continuous 2D 1-indexed table.
+function lib.matrix_from_file(filename)
+	local file = assert(io.open(filename, "r"))
+
+	local matrix = {}
+	for line in file:lines() do
+		matrix[#matrix+1] = lib.list_from_line(line)
+	end
+
+	file:close()
+	return matrix
 end
 
 return lib
