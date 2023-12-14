@@ -134,4 +134,16 @@ function lib.matrix_from_file(filename)
 	return matrix
 end
 
+---Sum elements of `list`.
+---Elements should be convertible to `number`.
+---@param list list
+---@return number # Sum of all elements in `list`
+function lib.lsum(list)
+	local sum = 0
+	for i = 1, #list do
+		sum = sum + tonumber(list[i])
+	end
+	return sum
+end
+
 return lib
