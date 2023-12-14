@@ -1,14 +1,6 @@
-local file = assert( io.open("input", "r"))
+local lib = require "lib"
 
-local columns = {}
-local i_row = 1
-for line in file:lines() do
-	for col = 1, #line do
-		columns[col] = columns[col] or {}
-		columns[col][i_row] = line:sub(col, col)
-	end
-	i_row = i_row + 1
-end
+local columns = lib.matrix_from_file("input")
 
 -- Move rocks up
 for col = 1, #columns do
