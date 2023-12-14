@@ -1,8 +1,8 @@
 local lib = {}
 
 ---@generic T an element of a list or matrix
----@alias list T[] a 1D continuous 1-indexed 
----@alias matrix list[] a 2D continuous 1-indexed 
+---@alias list T[] a 1D continuous 1-indexed
+---@alias matrix list[] a 2D continuous 1-indexed
 
 
 ---@param list list The list to be printed
@@ -23,7 +23,7 @@ function lib.mprint(matrix, separator, row_separator)
 
 	local rows = {}
 	for i_row = 1, #matrix do
-		rows[#rows+1] = lib.lprint(matrix[i_row], separator)
+		rows[#rows + 1] = lib.lprint(matrix[i_row], separator)
 	end
 
 	print(table.concat(rows, row_separator))
@@ -35,7 +35,7 @@ end
 function lib.lcopy(list)
 	local copy = {}
 	for i = 1, #list do
-		copy[#copy+1] = list[i]
+		copy[#copy + 1] = list[i]
 	end
 	return copy
 end
@@ -46,7 +46,7 @@ end
 function lib.mcopy(matrix)
 	local copy = {}
 	for i = 1, #matrix do
-		copy[#copy+1] = lib.lcopy(matrix[i])
+		copy[#copy + 1] = lib.lcopy(matrix[i])
 	end
 	return copy
 end
@@ -99,7 +99,7 @@ function lib.list_from_line(line)
 	local list = {}
 
 	for i = 1, #line do
-		list[#list+1] = line:sub(i, i)
+		list[#list + 1] = line:sub(i, i)
 	end
 	return list
 end
@@ -112,7 +112,7 @@ function lib.lines_from_file(filename)
 
 	local lines = {}
 	for line in file:lines() do
-		lines[#lines+1] = line
+		lines[#lines + 1] = line
 	end
 
 	file:close()
@@ -127,7 +127,7 @@ function lib.matrix_from_file(filename)
 
 	local matrix = {}
 	for line in file:lines() do
-		matrix[#matrix+1] = lib.list_from_line(line)
+		matrix[#matrix + 1] = lib.list_from_line(line)
 	end
 
 	file:close()
